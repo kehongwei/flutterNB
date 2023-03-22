@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:rive/rive.dart';
 
 import '../../controllers/popular_product_controller.dart';
 import '../../controllers/recommended_product_controller.dart';
@@ -51,26 +52,30 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ScaleTransition(
-            scale: _animation,
-            child: Center(
-              child: Image.asset(
-                "assets/image/logo part 1.png",
-                width: Dimensions.dimen1*250,
-              ),
-            ),
-          ),
-          Center(
-            child: Image.asset(
-              "assets/image/logo part 2.png",
-              width: Dimensions.dimen1*250,
-            ),
-          ),
-        ],
+      body: Center(
+        child: RiveAnimation.asset("assets/rive/shapes.riv"),
       ),
     );
   }
 }
+
+// Column(
+// mainAxisAlignment: MainAxisAlignment.center,
+// children: [
+// ScaleTransition(
+// scale: _animation,
+// child: Center(
+// child: Image.asset(
+// "assets/image/logo part 1.png",
+// width: Dimensions.dimen1*250,
+// ),
+// ),
+// ),
+// Center(
+// child: Image.asset(
+// "assets/image/logo part 2.png",
+// width: Dimensions.dimen1*250,
+// ),
+// ),
+// ],
+// )

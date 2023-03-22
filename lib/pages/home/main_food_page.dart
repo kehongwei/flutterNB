@@ -5,10 +5,12 @@ import 'package:food_delivery/utils/dimensions.dart';
 import 'package:food_delivery/widgets/big_text.dart';
 import 'package:food_delivery/widgets/small_text.dart';
 import 'package:get/get.dart';
+import 'package:rive/rive.dart';
 
 import '../../controllers/popular_product_controller.dart';
 import '../../controllers/recommended_product_controller.dart';
 import '../../utils/colors.dart';
+import '../../utils/rive_utils.dart';
 
 class MainFoodPage extends StatefulWidget {
   const MainFoodPage({Key? key}) : super(key: key);
@@ -29,7 +31,7 @@ class _MainFoodPageState extends State<MainFoodPage> {
     return RefreshIndicator(
         color: Colors.blue,
         backgroundColor: Colors.white,
-        displacement: 50,
+        displacement: 50, onRefresh: _loadResource,
         child:  Column(
       children: [
         Container(
@@ -50,17 +52,14 @@ class _MainFoodPageState extends State<MainFoodPage> {
                     )
                   ],
                 ),
-                Center(
-                  child: Container(
-                    width: Dimensions.dimen45,
-                    height: Dimensions.dimen45,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(Dimensions.dimen15),
-                        color: AppColors.mainColor
-                    ),
-                    child: Icon(Icons.search,color: Colors.white,size: Dimensions.dimen24,),
-                  ),
-                )
+                 Container(
+                  color: Color(0x3D63AFFF),
+                  width: 120,
+                  height: 40,
+                  child: RiveAnimation.asset(
+                        "assets/rive/smile.riv",
+                         fit: BoxFit.cover,
+                )),
               ],
             ),
           ),
@@ -69,6 +68,6 @@ class _MainFoodPageState extends State<MainFoodPage> {
           child: FoodPageBody(),
         )),
       ],
-    ), onRefresh: _loadResource);
+    ));
   }
 }
