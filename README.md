@@ -1,6 +1,9 @@
 # food_delivery
 
-A new Flutter project.
+Flutter Study.
+
+![intro1](/lib/gif/gif001.gif)
+![intro2](/lib/gif/gif002.gif)
 
 ## Getting Started
 
