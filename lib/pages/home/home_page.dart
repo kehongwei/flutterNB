@@ -16,6 +16,7 @@ import '../../utils/rive_utils.dart';
 import '../../widgets/animated_bar.dart';
 import '../wan_android/wan_android_page.dart';
 import 'main_food_page.dart';
+import '../../controllers/home_controller.dart';
 //import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,7 +35,7 @@ class _HomePageState extends State<HomePage> {
     MainFoodPage(),
     WanAndroidPage(),
     CartHistory(),
-    Get.find<AuthController>().userLoggedIn() ? AccountPage() : SignInPage(),
+    SignInPage(),
   ];
 
   void onTapNav(int index) {
@@ -57,71 +58,76 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(
-        index: _seletectedIndex,
-        children: pages,
-      ),
-      bottomNavigationBar: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          margin: const EdgeInsets.symmetric(horizontal: 24),
-          decoration: BoxDecoration(
-            color: backgroundColor2.withOpacity(0.8),
-            borderRadius: const BorderRadius.all(Radius.circular(24)),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ...List.generate(
-                bottomNavs.length,
-                    (index) => GestureDetector(
-                  onTap: () {
-                    bottomNavs[index].input!.change(true);
-                    if (bottomNavs[index] != selectedBottomNav) {
-                      setState(() {
-                        selectedBottomNav = bottomNavs[index];
+
+    return GetBuilder<HomeController>(builder: (homeController){
+      Get.find<AuthController>().userLoggedIn()?pages[3]=AccountPage():SignInPage();
+
+      return Scaffold(
+        body: IndexedStack(
+          index: _seletectedIndex,
+          children: pages,
+        ),
+        bottomNavigationBar: SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            margin: const EdgeInsets.symmetric(horizontal: 24),
+            decoration: BoxDecoration(
+              color: backgroundColor2.withOpacity(0.8),
+              borderRadius: const BorderRadius.all(Radius.circular(24)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ...List.generate(
+                  bottomNavs.length,
+                      (index) => GestureDetector(
+                    onTap: () {
+                      bottomNavs[index].input!.change(true);
+                      if (bottomNavs[index] != selectedBottomNav) {
+                        setState(() {
+                          selectedBottomNav = bottomNavs[index];
+                        });
+                      }
+                      onTapNav(index);
+                      Future.delayed(const Duration(seconds: 1), () {
+                        bottomNavs[index].input!.change(false);
                       });
-                    }
-                    onTapNav(index);
-                    Future.delayed(const Duration(seconds: 1), () {
-                      bottomNavs[index].input!.change(false);
-                    });
 
-                  },
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      AnimatedBar(isActive: bottomNavs[index] == selectedBottomNav),
-                      SizedBox(
-                        height: 36,
-                        width: 36,
-                        child: Opacity(
-                          opacity:
-                          bottomNavs[index] == selectedBottomNav ? 1 : 0.5,
-                          child: RiveAnimation.asset(
-                            bottomNavs.first.src,
-                            artboard: bottomNavs[index].artBoard,
-                            onInit: (artboard) {
-                              StateMachineController controller =
-                              RiveUtils.getRiveController(artboard,
-                                  stateMachineName: bottomNavs[index].stateMachineName);
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AnimatedBar(isActive: bottomNavs[index] == selectedBottomNav),
+                        SizedBox(
+                          height: 36,
+                          width: 36,
+                          child: Opacity(
+                            opacity:
+                            bottomNavs[index] == selectedBottomNav ? 1 : 0.5,
+                            child: RiveAnimation.asset(
+                              bottomNavs.first.src,
+                              artboard: bottomNavs[index].artBoard,
+                              onInit: (artboard) {
+                                StateMachineController controller =
+                                RiveUtils.getRiveController(artboard,
+                                    stateMachineName: bottomNavs[index].stateMachineName);
 
-                              bottomNavs[index].input =
-                              controller.findSMI("active") as SMIBool;
-                            },
+                                bottomNavs[index].input =
+                                controller.findSMI("active") as SMIBool;
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
   // BottomNavigationBar(
   // selectedItemColor: AppColors.mainColor,

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/gestures.dart';
@@ -22,6 +23,8 @@ class SignInPage extends StatelessWidget {
   SignInPage({Key? key}) : super(key: key);
   var usernameController = TextEditingController();
   var passwordController = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -164,7 +167,12 @@ class SignInPage extends StatelessWidget {
 
         // var bean = UserBean.fromJson();
         if (wanResponse.errorCode == 0) {
-           Get.find<HomeController>().refreshPage();
+          Get.find<HomeController>().refreshPage();
+
+          // Future.delayed(const Duration(seconds: 1), () {
+          //   print("------xxxxxxxxxxxx-----");
+          //
+          // });
         } else {
           showCustomSnackBar(wanResponse.errorMsg);
         }
