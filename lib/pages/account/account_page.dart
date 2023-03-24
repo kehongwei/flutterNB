@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:food_delivery/routes/route_helper.dart';
 import 'package:food_delivery/utils/colors.dart';
 import 'package:food_delivery/utils/dimensions.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:rive/rive.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../base/custom_app_bar.dart';
@@ -12,17 +14,26 @@ import '../../widgets/account_widget.dart';
 import '../../widgets/app_icon.dart';
 import '../../widgets/big_text.dart';
 
-class AccountPage extends StatelessWidget {
+class AccountPage extends StatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
 
   @override
+  State<AccountPage> createState() => _AccountPageState();
+}
+
+class _AccountPageState extends State<AccountPage> {
+
+  var authController = Get.find<AuthController>();
+  // bool userLoggedIn = authController.userLoggedIn();
+  var sp = Get.find<SharedPreferences>();
+  final ImagePicker _picker = ImagePicker();
+
+  @override
   Widget build(BuildContext context) {
-    var authController = Get.find<AuthController>();
-    bool userLoggedIn = authController.userLoggedIn();
-    var sp = Get.find<SharedPreferences>();
 
     return Scaffold(
       appBar: CustomAppBar(title: "Profile",),
+
       body: SingleChildScrollView(
         child: Container(
           width: double.maxFinite,
@@ -31,11 +42,14 @@ class AccountPage extends StatelessWidget {
           ),
           child: Column(
             children: [
-              const CircleAvatar(
-                backgroundColor: Colors.white,
-                radius: 80,
-                backgroundImage: AssetImage(
-                  "assets/image/boys.png",
+              GestureDetector(
+                onTap: () {
+                  _onImageButtonPressed(ImageSource.gallery, context: context);
+                },
+                child:  CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 80,
+                  backgroundImage:getHead().isNotEmpty  ? FileImage(File(getHead())) : const AssetImage("assets/image/boys.png") as ImageProvider<Object>,
                 ),
               ),
               SizedBox(
@@ -100,7 +114,6 @@ class AccountPage extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   authController.clearSharedData();
-
                 },
                 child: AccountWidget(
                     appIcon: AppIcon(
@@ -123,4 +136,49 @@ class AccountPage extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> _onImageButtonPressed(ImageSource source,
+      {BuildContext? context, bool isMultiImage = false}) async {
+
+    {
+      try {
+        final XFile? pickedFile = await _picker.pickImage(
+          source: source,
+          maxWidth: null,
+          maxHeight: null,
+          imageQuality: null,
+        );
+        setState(() {
+          if(pickedFile != null ) {
+            saveHead(pickedFile.path);
+          }
+        });
+      } catch (e) {
+        // setState(() {
+        //   _pickImageError = e;
+        // });
+      }
+
+    }
+  }
+
+  Future<void> saveHead(String path) async {
+    try {
+      await sp.setString(AppConstants.HEAD, path);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  String getHead() {
+    return sp.getString(AppConstants.HEAD) ?? "";
+  }
 }
+
+
+
+
+typedef OnPickImageCallback = void Function(
+    double? maxWidth, double? maxHeight, int? quality);
+
+

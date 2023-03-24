@@ -16,6 +16,7 @@ class AppConstants {
   static const String LOGIN_URI = "/user/login";
   static const String PHONE = "username";
   static const String PASSWORD = "password";
+  static const String HEAD = "head";
   static const String  ARTICLE = "/article/list/";
 
 }
