@@ -3,6 +3,7 @@
 Flutter Study.
 
 ![intro1](/lib/gif/gif001.gif)
+![intro1](/lib/gif/gif002.gif)
 
 ## Getting Started
 ```
@@ -21,6 +22,7 @@ dependencies:
   json_annotation: ^4.8.0
   rive: ^0.10.3
   flutter_staggered_grid_view: ^0.6.2
+  image_picker: ^0.8.7
 dev_dependencies:
   build_runner: ^2.3.3
   json_serializable: ^6.6.1
